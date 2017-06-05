@@ -11,38 +11,44 @@ var GreeterMessage = React.createClass({
       );
     }
 });
-//------------------------------------------------------------------------------
 
 var GreeterForm = React.createClass({
   onFormSubmit: function (e) {
     e.preventDefault();
 
+    var updates = {};
     var name = this.refs.name.value;
-    var message = this.refs.message.value;//me
+    var message = this.refs.message.value;
 
     if (name.length > 0) {
       this.refs.name.value = '';
-      this.props.onNewName(name);
+      updates.name = name;
     }
 
     if (message.length > 0){
-      this.refs.message.value = '';//me
-      this.props.onNewMessage(message);//me
+      this.refs.message.value = '';
+      updates.message = message;
     }
+
+    this.props.onNewData(updates);
   },
   render: function () {
     return (
       <form onSubmit={this.onFormSubmit}>
-        <input type="text" ref="name"/>
-        <p><textarea rows="10" cols="45" ref="message"></textarea></p>
-        <button>Set Name</button>
+        <div>
+          <input type="text" ref="name"/>
+        </div>
+        <div>
+          <textarea rows="10" cols="45" ref="message"></textarea>
+        </div>
+        <div>
+          <button>Set Name</button>
+        </div>
       </form>
     );
   }
 });
-//------------------------------------------------------------------------------
 
-//------------------------------------------------------------------------------
 var Greeter = React.createClass({
   getDefaultProps: function () {
     return {
@@ -53,32 +59,24 @@ var Greeter = React.createClass({
   getInitialState: function () {
     return {
         name: this.props.name,
-        message: this.props.message//me
+        message: this.props.message
     };
   },
-  handleNewName: function (name) {
-    this.setState({
-      name: name
-    });
-  },
-  handleNewMessage: function (message) {//me
-    this.setState({
-      message: message
-    });
+  handleNewData : function (updates){
+    this.setState(updates);
   },
   render: function () {
     var name = this.state.name;
-    var message = this.state.message;//me change props to state
+    var message = this.state.message;
 
     return (
       <div>
         <GreeterMessage name={name} message={message}/>
-        <GreeterForm onNewName={this.handleNewName} onNewMessage={this.handleNewMessage}/>
+        <GreeterForm onNewData={this.handleNewData}/>
       </div>
     );
   }
 });
-//------------------------------------------------------------------------------
 
 var firstName = 'Andrew';
 
